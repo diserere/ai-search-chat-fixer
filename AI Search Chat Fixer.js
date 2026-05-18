@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         AI Search Chat Fixer
 // @namespace    http://tampermonkey.net
-// @version      1.2
-// @description  Intercepts Enter globally in input areas.
+// @version      1.2.1
+// @description  Intercepts Enter globally in input areas (Smell Bugfix version).
 // @author       You
 // @match        http://*/*
 // @match        https://*/*
@@ -45,7 +45,7 @@
         }
 
         // Кейс 2: Нажат Ctrl + Enter
-        if (event.key === 'Enter' && event.ctrlKey) {
+        if (event.key === 'Enter' && event.shiftKey) {
             // Имитируем отправку: убираем модификатор Ctrl и пускаем событие дальше,
             // чтобы оригинальный скрипт сайта подумал, что это был обычный Enter для отправки.
             event.stopPropagation();
