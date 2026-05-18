@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         AI Search Chat Fixer
+// @name         AI Search Chat Fixer (Final Stable)
 // @namespace    http://tampermonkey.net
-// @version      1.2.1
-// @description  Intercepts Enter globally in input areas (Smell Bugfix version).
+// @version      2.1.0
+// @description  Safely maps Enter to Newline using direct DOM injection and leaves Ctrl+Enter untouched.
 // @author       You
 // @match        http://*/*
 // @match        https://*/*
@@ -14,53 +14,40 @@
 (function() {
     'use strict';
 
-    // Слушаем событие нажатия клавиши на этапе погружения (capture phase)
     window.addEventListener('keydown', function(event) {
-        // Проверяем, что фокус находится в текстовом поле ввода (textarea или contenteditable)
-        const isTextBox = event.target.tagName === 'TEXTAREA' || 
-                          event.target.getAttribute('contenteditable') === 'true';
+        const target = event.target;
+        
+        // Проверяем фокус в поле ввода
+        const isTextBox = target.tagName === 'TEXTAREA' || 
+                          target.getAttribute('contenteditable') === 'true';
         
         if (!isTextBox) return;
 
-        // Кейс 1: Нажат просто Enter (без Ctrl, Shift, Alt)
+        // Фильтруем ТОЛЬКО одиночный Enter
         if (event.key === 'Enter' && !event.ctrlKey && !event.shiftKey && !event.altKey) {
-            // Останавливаем оригинальный скрипт Гугла, который пытается отправить форму
-            event.stopPropagation();
+            // Полностью блокируем отправку
             event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
 
-            // Вставляем перенос строки программно в зависимости от типа поля
-            if (event.target.tagName === 'TEXTAREA') {
-                const start = event.target.selectionStart;
-                const end = event.target.selectionEnd;
-                const text = event.target.value;
-                event.target.value = text.substring(0, start) + "\n" + text.substring(end);
-                event.target.selectionStart = event.target.selectionEnd = start + 1;
+            // Жесткая вставка символа переноса строки в обход логики Гугла
+            if (target.tagName === 'TEXTAREA') {
+                const start = target.selectionStart;
+                const end = target.selectionEnd;
+                const text = target.value;
+                target.value = text.substring(0, start) + "\n" + text.substring(end);
+                target.selectionStart = target.selectionEnd = start + 1;
             } else {
-                // Для contenteditable (богатый текст, если Гугл использует его)
+                // Если Гугл использует contenteditable div
                 document.execCommand('insertLineBreak');
             }
             
-            // Триггерим событие изменения ввода, чтобы интерфейс увидел новый текст
-            event.target.dispatchEvent(new Event('input', { bubbles: true }));
+            // Оповещаем фреймворк страницы, что текст изменился
+            target.dispatchEvent(new Event('input', { bubbles: true }));
         }
-
-        // Кейс 2: Нажат Ctrl + Enter
-        if (event.key === 'Enter' && event.shiftKey) {
-            // Имитируем отправку: убираем модификатор Ctrl и пускаем событие дальше,
-            // чтобы оригинальный скрипт сайта подумал, что это был обычный Enter для отправки.
-            event.stopPropagation();
-            event.preventDefault();
-            
-            const e = new KeyboardEvent('keydown', {
-                key: 'Enter',
-                keyCode: 13,
-                code: 'Enter',
-                which: 13,
-                bubbles: true,
-                cancelable: true
-            });
-            event.target.dispatchEvent(e);
-        }
-    }, true); // Флаг true активирует фазу перехвата (capture), обгоняя скрипты страницы
+        
+        // Все остальные комбинации (Ctrl+Enter, Shift+Enter) скрипт просто игнорирует,
+        // отдавая их на откуп встроенным фичам браузера и Google.
+    }, true);
 })();
 
