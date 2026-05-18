@@ -1,10 +1,12 @@
 // ==UserScript==
-// @name         AI Search Chat Fixer: Enter to Newline, Ctrl+Enter to Send
+// @name         AI Search Chat Fixer
 // @namespace    http://tampermonkey.net
-// @version      1.0
-// @description  Changes Enter behavior to insert newline and Ctrl+Enter to submit message.
-// @author       Diserere
-// @match        https://*://*
+// @version      1.2
+// @description  Intercepts Enter globally in input areas.
+// @author       You
+// @match        http://*/*
+// @match        https://*/*
+// @allFrames    true
 // @grant        none
 // @run-at       document-start
 // ==/UserScript==
