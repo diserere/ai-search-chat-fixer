@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         DeepSeek Chat Fixer (Enter to New Line, Ctrl+Enter to Send)
 // @namespace    https://github.com
-// @version      1.0.0
+// @version      1.1.0
 // @description  Исправляет поведение клавиш в чате DeepSeek: Enter делает перенос строки, а Ctrl+Enter отправляет сообщение.
 // @author       Ваше Имя / diserere
 // @match        https://chat.deepseek.com/*
@@ -15,56 +15,44 @@
 
     // Функция обработки нажатий клавиш
     function handleKeyDown(e) {
-        // Проверяем, что фокус именно на текстовом поле ввода чата
         if (e.target.tagName !== 'TEXTAREA' || e.target.name !== 'search') return;
 
         const isEnter = e.key === 'Enter';
-        const isCtrl = e.ctrlKey || e.metaKey; // Поддержка Cmd для macOS
+        const isCtrl = e.ctrlKey || e.metaKey;
         const isShift = e.shiftKey;
         const isAlt = e.altKey;
 
         if (isEnter) {
-            // Сценарий 1: Осознанная отправка через Ctrl + Enter (или Cmd + Enter)
+            // Сценарий 1: Ctrl + Enter -> Отправка сообщения
             if (isCtrl && !isShift && !isAlt) {
-                // Ищем кнопку отправки рядом с textarea (обычно это кнопка внутри формы или соседний элемент)
-                // На DeepSeek кнопка отправки часто имеет специфический svg-значок. Попробуем найти её через родительский контейнер.
-                const form = e.target.closest('form') || e.target.parentElement;
-                const sendButton = form ? form.querySelector('button:not([disabled])') : null;
+                e.preventDefault();
+                e.stopPropagation();
 
-                if (sendButton) {
-                    e.preventDefault();
-                    sendButton.click(); // Симулируем клик по кнопке отправки
+                // Ищем кнопку отправки по более точному селектору DeepSeek
+                // Обычно кнопка отправки имеет атрибут или находится внутри контейнера формы
+                const form = e.target.closest('form') || e.target.parentElement;
+                // Ищем кнопку, которая визуально является кнопкой отправки (часто последняя кнопка в форме)
+                const sendButton = form ? (form.querySelector('button[type="submit"]') || form.querySelector('button:last-child')) : null;
+
+                if (sendButton && !sendButton.disabled) {
+                    sendButton.click();
                 } else {
-                    // Альтернативный вариант, если кнопка не найдена: отправляем форму напрямую
+                    // Если кнопку не нашли или она disabled, пробуем отправить форму напрямую
                     const closestForm = e.target.closest('form');
                     if (closestForm) {
-                        e.preventDefault();
                         closestForm.requestSubmit();
                     }
                 }
             } 
-            // Сценарий 2: Обычный Enter, Shift+Enter или Alt+Enter -> строго перенос строки
-            else {
-                e.stopPropagation(); // Останавливаем перехват события встроенными скриптами DeepSeek
-                
-                // Если нажат чистый Enter или Alt+Enter (поведение по умолчанию для Shift+Enter и так перенос в браузере)
-                if (!isShift) {
-                    e.preventDefault();
-                    
-                    const textarea = e.target;
-                    const start = textarea.selectionStart;
-                    const end = textarea.selectionEnd;
-                    const text = textarea.value;
+            // Сценарий 2: Enter или Alt+Enter -> Безопасный перенос строки со скроллом
+            else if (!isShift) {
+                e.preventDefault();
+                e.stopPropagation();
 
-                    // Вставляем перенос строки в позицию курсора
-                    textarea.value = text.substring(0, start) + "\n" + text.substring(end);
-
-                    // Возвращаем курсор на место сразу после вставленного переноса строки
-                    textarea.selectionStart = textarea.selectionEnd = start + 1;
-
-                    // Триггерим событие инпута, чтобы интерфейс (React/Vue) DeepSeek заметил изменение высоты поля
-                    textarea.dispatchEvent(new Event('input', { bubbles: true }));
-                }
+                // Используем execCommand для нативной вставки символа перевода строки.
+                // Это автоматически заставит фреймворк DeepSeek корректно обработать ввод,
+                // изменить высоту textarea и проскроллить её вниз вслед за курсором.
+                document.execCommand('insertText', false, '\n');
             }
         }
     }
