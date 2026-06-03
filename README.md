@@ -8,9 +8,9 @@
 .
 ├── AI.md
 ├── docs
-│   ├── Guideline_proposals.md
-│   ├── Project_Retrospective_by_AI.md
-│   └── Testing_prompt.md
+│   ├── AI_Dev_prompts.md
+│   ├── Chat_history_extras.md
+│   └── Project_Retrospective_by_AI.md
 ├── .gitignore
 ├── README.md
 └── src
@@ -62,9 +62,10 @@ tree -a --gitignore -I .git
 
 Проект развивается по методологии **Trunk-Based Development** с использованием семантического версионирования **SemVer 2.0.0**. Код написан на чистом JavaScript (Vanilla JS) без внешних зависимостей.
 
-## AI instructions
+## Информация для AI ассистентов
 
-**Инофрмация для AI ассистентов**: архитектурные принципы, технические аспекты реализации и принятые стандарты ведения разработки описаны в файле [AI.md](./AI.md).
+- архитектурные принципы, технические аспекты реализации и принятые стандарты ведения разработки описаны в файле [AI.md](./AI.md).
+- ретроспектива спринтов проекта: [Project_Retrospective_by_AI.md](./docs/Project_Retrospective_by_AI.md)
 
 ## Безопасность
 
