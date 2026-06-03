@@ -3,9 +3,10 @@
 // @namespace    http://tampermonkey.net
 // @version      2.0.5
 // @description  Safely maps Enter and Alt+Enter to Newline using direct DOM injection with AI context validation.
-// @author       You
+// @icon         https://www.google.com/favicon.ico
+// @author       diserere (https://github.com/diserere)
+// @homepageURL  https://github.com/diserere/ai-search-chat-fixer
 // @match        https://www.google.com/search*
-// @allFrames    true
 // @grant        none
 // @run-at       document-start
 // ==/UserScript==

@@ -3,9 +3,10 @@
 // @namespace    https://github.com
 // @version      1.4.0
 // @description  Исправляет поведение клавиш в чате DeepSeek: Enter делает перенос строки, а Ctrl+Enter отправляет сообщение через симуляцию событий.
-// @author       diserere
+// @icon         https://deepseek.com/favicon.ico
+// @author       diserere (https://github.com/diserere)
+// @homepageURL  https://github.com/diserere/ai-search-chat-fixer
 // @match        https://chat.deepseek.com/*
-// @icon         https://deepseek.comfavicon.ico
 // @grant        none
 // @run-at       document-end
 // ==/UserScript==
