@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Google AI Search Chat Fixer 2.0.5
-// @namespace    http://tampermonkey.net
+// @namespace    https://github.com/diserere/ai-search-chat-fixer
 // @version      2.0.5
 // @description  Safely maps Enter and Alt+Enter to Newline using direct DOM injection with AI context validation.
 // @icon         https://www.google.com/favicon.ico

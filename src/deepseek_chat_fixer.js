@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         DeepSeek Chat Fixer 1.4.0
-// @namespace    https://github.com
+// @namespace    https://github.com/diserere/ai-search-chat-fixer
 // @version      1.4.0
 // @description  Исправляет поведение клавиш в чате DeepSeek: Enter делает перенос строки, а Ctrl+Enter отправляет сообщение через симуляцию событий.
 // @icon         https://deepseek.com/favicon.ico
