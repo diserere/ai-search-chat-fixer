@@ -6,16 +6,21 @@
 
 ```text
 .
-├── AI.md
-├── docs
-│   ├── AI_Dev_prompts.md
-│   ├── Chat_history_extras.md
-│   └── Project_Retrospective_by_AI.md
+├── AI.md                       # Инструкции и гайдлайны для AI-ассистентов
+├── docs                        # Документация и аналитические материалы
+│   ├── AI_Dev_prompts.md       # Промпты, использовавшиеся при разработке
+│   ├── Chat_history_extras.md  # Дополнительные логи и контекст обсуждений
+│   ├── profiles                # Капсулы сохранения цифровой личности (Personality-as-Code)
+│   │   └── architect_interlocutor_personality.md
+│   ├── Project_Retrospective_by_AI.md # Ретроспектива проекта от лица ИИ
+│   └── test_reports            # Отчеты о тестировании модулей
+│       └── Qwen_Chat_Fixer_test_reports.md
 ├── .gitignore
-├── README.md
-└── src
+├── README.md                   # Описание проекта и инструкция по установке
+└── src                         # Исходный код юзерскриптов
     ├── deepseek_chat_fixer.js
-    └── google_ai_search_chat_fixer.js
+    ├── google_ai_search_chat_fixer.js
+    └── qwen_chat_fixer.js
 ```
 - получено командой:
 ```bash
@@ -48,6 +53,11 @@ tree -a --gitignore -I .git
 * **Файл:** [`src/deepseek_chat_fixer.js`](./src/deepseek_chat_fixer.js)
 * **Область действия:** `https://chat.deepseek.com/*`
 * **Особенности:** Использует нативный ввод символов через `insertText` для сохранения реактивности Vue/React-фреймворка (окно ввода послушно растягивается и скроллится). Отправка по `Ctrl+Enter` реализована через генерацию нативного `KeyboardEvent('keydown')`, что обходит любые ограничения кастомных графических кнопок.
+
+### 3. Qwen Chat Fixer
+* **Файл:** [`src/qwen_chat_fixer.js`](./src/qwen_chat_fixer.js)
+* **Область действия:** `https://chat.qwen.ai/*`
+* **Особенности:** Перехватывает управление интерфейсом на базе библиотеки Ant Design на этапе погружения событий (`capture: true`). Блокирует дефолтную отправку по `Enter` и `Alt+Enter`, заменяя её безопасной симуляцией переноса строки через `execCommand('insertText')`, что сохраняет реактивность Virtual DOM и нативный автоскролл. Отправка по `Ctrl+Enter` делегирована программному клику по активной кнопке отправки.
 
 ---
 
