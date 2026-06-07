@@ -11,7 +11,8 @@
 │   ├── AI_Dev_prompts.md       # Промпты, использовавшиеся при разработке
 │   ├── Chat_history_extras.md  # Дополнительные логи и контекст обсуждений
 │   ├── profiles                # Капсулы сохранения цифровой личности (Personality-as-Code)
-│   │   └── architect_interlocutor_personality.md
+│   │   ├── architect_interlocutor_personality.md
+│   │   └── human_leader_manifesto.md
 │   ├── Project_Retrospective_by_AI.md # Ретроспектива проекта от лица ИИ
 │   └── test_reports            # Отчеты о тестировании модулей
 │       └── Qwen_Chat_Fixer_test_reports.md
