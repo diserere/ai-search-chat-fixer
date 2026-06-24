@@ -55,7 +55,7 @@ For Google AI Search: URL must contain `udm=50` (AI mode) — the script exits e
 
 ## Development Workflow (Trunk-Based)
 
-- Work in short-lived branches: `patch/vX.Y.Z-description` or `feat/vX.Y.Z-description`
+- Work in short-lived branches: `patch/<description>` or `feat/<description>` — no version in branch name (multiple scripts with independent versions)
 - Sync: `git checkout main && git pull --rebase`
 - One feature or one bugfix per commit — never mix infrastructure changes with logic fixes
 - Merge locally and push; no PRs
