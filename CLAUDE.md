@@ -90,7 +90,7 @@ Version is in each script's UserScript header `@version`:
     └── qwen_chat_fixer.js
 ```
 
-**Важно:** `docs/archive/` и `docs/testing/prompts/` исключены из контекста агента через `.claudeignore`. Они содержат исторический контекст и промпты для ручного тестирования, не являются инструкциями для кодинг-агента.
+**Важно:** `docs/archive/` исключена из контекста агента через `.claudeignore`. Она содержит исторический контекст и не является инструкциями для кодинг-агента. Единственный промпт для ручного тестирования хранится в `docs/testing/prompts/testing_prompt.md`.
 
 ## Key Constraints
 
