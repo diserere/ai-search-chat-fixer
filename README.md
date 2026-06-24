@@ -6,26 +6,22 @@
 
 ```text
 .
-├── AI.md                       # Инструкции и гайдлайны для AI-ассистентов
-├── docs                        # Документация и аналитические материалы
-│   ├── AI_Dev_prompts.md       # Промпты, использовавшиеся при разработке
-│   ├── Chat_history_extras.md  # Дополнительные логи и контекст обсуждений
-│   ├── profiles                # Капсулы сохранения цифровой личности (Personality-as-Code)
-│   │   ├── architect_interlocutor_personality.md
-│   │   └── human_leader_manifesto.md
-│   ├── Project_Retrospective_by_AI.md # Ретроспектива проекта от лица ИИ
-│   └── test_reports            # Отчеты о тестировании модулей
-│       └── Qwen_Chat_Fixer_test_reports.md
+├── CLAUDE.md                   # Инструкции для AI-ассистентов (Claude Code и др.)
+├── .claudeignore               # Исключения из контекста агента
 ├── .gitignore
-├── README.md                   # Описание проекта и инструкция по установке
-└── src                         # Исходный код юзерскриптов
+├── README.md                   # Этот файл
+├── docs/
+│   ├── archive/                # Исторический контекст (не читать агенту)
+│   │   ├── profiles/           # Капсулы личности, манифесты
+│   │   ├── Chat_history_extras.md
+│   │   └── Project_Retrospective_by_AI.md
+│   └── testing/                # Тестовые артефакты
+│       ├── prompts/            # Промпты для ручного тестирования через чат-бота
+│       └── reports/            # Отчёты о тестировании
+└── src/                        # Исходный код юзерскриптов
     ├── deepseek_chat_fixer.js
     ├── google_ai_search_chat_fixer.js
     └── qwen_chat_fixer.js
-```
-- получено командой:
-```bash
-tree -a --gitignore -I .git
 ```
 
 ## Решаемая проблема
@@ -75,8 +71,9 @@ tree -a --gitignore -I .git
 
 ## Информация для AI ассистентов
 
-- архитектурные принципы, технические аспекты реализации и принятые стандарты ведения разработки описаны в файле [AI.md](./AI.md).
-- ретроспектива спринтов проекта: [Project_Retrospective_by_AI.md](./docs/Project_Retrospective_by_AI.md)
+- архитектурные принципы, технические аспекты реализации и принятые стандарты описаны в файле [CLAUDE.md](./CLAUDE.md).
+- исторический контекст и ретроспектива хранятся в `docs/archive/` (не предназначены для чтения агентом при работе с кодом).
+- тест-репорты и промпты для ручного тестирования: `docs/testing/`.
 
 ## Безопасность
 

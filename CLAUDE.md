@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**AI Search Chat Fixer** — a collection of UserScripts (Tampermonkey/Violentmonkey) that fix keyboard UX in AI chat web interfaces. Each script remaps `Enter` to insert a newline and `Ctrl+Enter` to send, preventing accidental message submission.
+**AI Chat Fixers** — a collection of UserScripts (Tampermonkey/Violentmonkey) that fix keyboard UX in AI chat web interfaces. Each script remaps `Enter` to insert a newline and `Ctrl+Enter` to send, preventing accidental message submission.
 
 No build system, no dependencies, no test framework. Scripts are copied directly into a userscript manager.
 
@@ -67,6 +67,30 @@ Version is in each script's UserScript header `@version`:
 - **MAJOR**: architectural changes, rewrites, breaking migrations
 - **MINOR**: new features (e.g., supporting a new platform)
 - **PATCH**: bugfixes, stability, selector/match tweaks
+
+## Repository Structure
+
+```
+.
+├── CLAUDE.md                 # Этот файл — инструкции для агентов
+├── .claudeignore             # Исключения из контекста агента
+├── .gitignore
+├── README.md                 # Публичное описание проекта
+├── docs/
+│   ├── archive/              # Исторический контекст (не читать агенту)
+│   │   ├── profiles/         # Капсулы личности, манифесты
+│   │   ├── Chat_history_extras.md
+│   │   └── Project_Retrospective_by_AI.md
+│   └── testing/              # Тестовые артефакты
+│       ├── prompts/          # Промпты для ручного тестирования через чат-бота
+│       └── reports/          # Отчёты о тестировании
+└── src/                      # Исходный код юзерскриптов
+    ├── deepseek_chat_fixer.js
+    ├── google_ai_search_chat_fixer.js
+    └── qwen_chat_fixer.js
+```
+
+**Важно:** `docs/archive/` и `docs/testing/prompts/` исключены из контекста агента через `.claudeignore`. Они содержат исторический контекст и промпты для ручного тестирования, не являются инструкциями для кодинг-агента.
 
 ## Key Constraints
 
