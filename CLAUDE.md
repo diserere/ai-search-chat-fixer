@@ -79,6 +79,7 @@ Version is in each script's UserScript header `@version`:
 ├── docs/
 │   ├── archive/              # Исторический контекст (не читать агенту)
 │   │   ├── profiles/         # Капсулы личности, манифесты
+│   │   ├── prompts/         # Промпты для чат-ботов (onboarding, personality)
 │   │   ├── Chat_history_extras.md
 │   │   └── Project_Retrospective_by_AI.md
 │   └── testing/              # Тестовые артефакты

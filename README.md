@@ -13,10 +13,11 @@
 ├── docs/
 │   ├── archive/                # Исторический контекст (не читать агенту)
 │   │   ├── profiles/           # Капсулы личности, манифесты
+│   │   ├── prompts/           # Промпты для чат-ботов (onboarding, personality)
 │   │   ├── Chat_history_extras.md
 │   │   └── Project_Retrospective_by_AI.md
 │   └── testing/                # Тестовые артефакты
-│       ├── prompts/            # Промпты для ручного тестирования через чат-бота
+│       ├── prompts/            # Промпт для ручного тестирования через чат-бота
 │       └── reports/            # Отчёты о тестировании
 └── src/                        # Исходный код юзерскриптов
     ├── deepseek_chat_fixer.js
