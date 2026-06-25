@@ -60,6 +60,7 @@ For Google AI Search: URL must contain `udm=50` (AI mode) — the script exits e
 - One feature or one bugfix per commit — never mix infrastructure changes with logic fixes
 - Merge locally and push; no PRs
 - Every code change must come with a Conventional Commit message
+- Every commit by the agent must include `Co-Authored-By: Claude <noreply@anthropic.com>` in the commit message trailer
 
 ## Versioning (SemVer 2.0.0)
 
