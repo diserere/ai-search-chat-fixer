@@ -12,6 +12,7 @@
 ├── .gitignore
 ├── README.md                   # Этот файл
 ├── docs/
+│   ├── backlog.md              # Бэклог задач (дублируется в GitHub Issues)
 │   ├── archive/                # Исторический контекст
 │   │   ├── profiles/           # Капсулы личности, манифесты
 │   │   ├── prompts/            # Промпты для чат-ботов (onboarding, personality)
