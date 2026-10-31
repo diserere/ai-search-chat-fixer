@@ -13,7 +13,6 @@
 
 | # | Задача | Приоритет |
 |---|--------|-----------|
-| [#10](https://github.com/diserere/ai-search-chat-fixer/issues/10) | Поддержка ChatGPT (chatgpt.com) | — (в работе) |
 | [#9](https://github.com/diserere/ai-search-chat-fixer/issues/9) | `@updateURL` / `@downloadURL` для автообновления скриптов | medium |
 | [#8](https://github.com/diserere/ai-search-chat-fixer/issues/8) | Унифицировать заголовки и комментарии скриптов | low |
 
@@ -29,4 +28,6 @@
 
 ## Сделано
 
-_Пока пусто._
+| # | Задача | Где |
+|---|--------|-----|
+| [#10](https://github.com/diserere/ai-search-chat-fixer/issues/10) | Поддержка ChatGPT (chatgpt.com) — ChatGPT Chat Fixer 1.0.0 | `src/chatgpt_chat_fixer.js` |

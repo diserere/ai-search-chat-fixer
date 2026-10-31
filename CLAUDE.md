@@ -15,6 +15,7 @@
 | Google AI Search Chat Fixer | `src/google_ai_search_chat_fixer.js` | `https://www.google.com/search*` (только AI-режим) | `document-start` |
 | DeepSeek Chat Fixer | `src/deepseek_chat_fixer.js` | `https://chat.deepseek.com/*` | `document-end` |
 | Qwen Chat Fixer | `src/qwen_chat_fixer.js` | `https://chat.qwen.ai/*` | `document-start` |
+| ChatGPT Chat Fixer | `src/chatgpt_chat_fixer.js` | `https://chatgpt.com/*` | `document-start` |
 
 Каждый скрипт самодостаточен: один IIFE, один обработчик `keydown` на `window` в фазе capture. Общих модулей нет.
 
@@ -28,6 +29,8 @@
 4. Прогнать сценарий из `docs/testing/prompts/testing_prompt.md` (кодировка клавиш e/a/s/c, маркеры `n`/`F`/`f`).
 
 Отчёты о тестировании — в `docs/testing/reports/`.
+
+Агент может проводить исследование и тестирование сам через Claude in Chrome (сессия запускается `claude --chrome`; в VS Code-расширении интеграция недоступна): читать DOM, выполнять JS в контексте страницы, внедрять код скрипта (эквивалент `@grant none`) и нажимать реальные клавиши (`isTrusted: true`). Перед отправкой сообщений в чат нужно получить отдельное согласие пользователя в текущей сессии; разрешение из прошлых сессий не переносится. Финальная проверка установки через Tampermonkey/Violentmonkey — за пользователем.
 
 Для Google AI Search URL должен содержать `udm=50` (AI-режим), иначе скрипт ничего не делает.
 
@@ -51,6 +54,13 @@
 - Guard: target соответствует `.message-input-textarea` (Ant Design).
 - `Ctrl+Enter`: программный клик по `.send-button:not(.disabled)`.
 - `Enter` / `Alt+Enter` / `Shift+Enter` (всё без Ctrl): `document.execCommand('insertText', false, '\n')` с фолбеком на ручной splice `value`.
+
+### ChatGPT Chat Fixer (`src/chatgpt_chat_fixer.js`)
+- Guard: target внутри `.ProseMirror`; пропуск при IME-композиции (`isComposing` / `keyCode === 229`).
+- Скрипт не вызывает `preventDefault` и не генерирует событий — он подменяет модификаторы у trusted-события через `Object.defineProperty` в фазе capture:
+  - `Enter` / `Alt+Enter` → `shiftKey: true`, `altKey: false` (нативный Shift+Enter — новый абзац);
+  - `Ctrl+Enter` / `Cmd+Enter` → `ctrlKey: false`, `metaKey: false` (нативный Enter — отправка).
+- Почему не `execCommand`: ProseMirror трактует `insertParagraph` и `insertText('\n')` как Enter, то есть как отправку; синтетические `KeyboardEvent` игнорирует. Подробности — в `docs/testing/reports/ChatGPT_Chat_Fixer_test_reports.md`.
 
 ## Стиль кода
 
@@ -85,6 +95,7 @@
 │       ├── prompts/          # Промпт для ручного тестирования через чат-бота
 │       └── reports/          # Отчёты о тестировании
 └── src/                      # Исходный код юзерскриптов
+    ├── chatgpt_chat_fixer.js
     ├── deepseek_chat_fixer.js
     ├── google_ai_search_chat_fixer.js
     └── qwen_chat_fixer.js
@@ -97,3 +108,4 @@
 - Каждый скрипт ограничен своим origin через `@match`. Никаких кросс-доменных инъекций.
 - Никакого сбора, кэширования или передачи данных.
 - Синтетические события с `isTrusted: false` могут блокироваться SPA — по возможности предпочитать прямую работу с DOM (`execCommand`, splice `value`, `click()`) вместо dispatch `KeyboardEvent`. Исключение — DeepSeek, где dispatch события — единственный работающий путь.
+- Для редакторов, которые сами обрабатывают клавиши (ProseMirror и т.п.), надёжнее всего подменять модификаторы у реального trusted-события (как в ChatGPT): поведение совпадает с нативным без зависимости от селекторов кнопок.
