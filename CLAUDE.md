@@ -1,90 +1,83 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Инструкции для Claude Code при работе с этим репозиторием.
 
-## Project Overview
+## Обзор проекта
 
-**AI Chat Fixers** — a collection of UserScripts (Tampermonkey/Violentmonkey) that fix keyboard UX in AI chat web interfaces. Each script remaps `Enter` to insert a newline and `Ctrl+Enter` to send, preventing accidental message submission.
+**AI Chat Fixers** — коллекция UserScript'ов (Tampermonkey/Violentmonkey), исправляющих поведение клавиатуры в веб-интерфейсах AI-чатов. Каждый скрипт переназначает `Enter` на перенос строки, а `Ctrl+Enter` (`Cmd+Enter` на macOS) — на отправку, чтобы исключить случайную отправку недописанного сообщения.
 
-No build system, no dependencies, no test framework. Scripts are copied directly into a userscript manager.
+Сборки, зависимостей и тестового фреймворка нет. Скрипты копируются в менеджер userscript'ов как есть.
 
-## Source Files
+## Исходные файлы
 
-| Script | Path | Target | Run at |
-|--------|------|--------|--------|
-| Google AI Search Chat Fixer | `src/google_ai_search_chat_fixer.js` | `https://www.google.com/search*` (AI mode only) | `document-start` |
+| Скрипт | Путь | Цель | Run at |
+|--------|------|------|--------|
+| Google AI Search Chat Fixer | `src/google_ai_search_chat_fixer.js` | `https://www.google.com/search*` (только AI-режим) | `document-start` |
 | DeepSeek Chat Fixer | `src/deepseek_chat_fixer.js` | `https://chat.deepseek.com/*` | `document-end` |
 | Qwen Chat Fixer | `src/qwen_chat_fixer.js` | `https://chat.qwen.ai/*` | `document-start` |
 
-Each script is self-contained — single IIFE, one `keydown` listener on `window` (capture phase). No shared modules.
+Каждый скрипт самодостаточен: один IIFE, один обработчик `keydown` на `window` в фазе capture. Общих модулей нет.
 
-## How to Test
+## Тестирование
 
-1. Edit the target script in `src/`
-2. Copy full file content into Tampermonkey/Violentmonkey
-3. Save (Ctrl+S) and reload the target page
+Вручную, в браузере:
 
-For Google AI Search: URL must contain `udm=50` (AI mode) — the script exits early otherwise.
+1. Отредактировать скрипт в `src/`.
+2. Скопировать содержимое файла целиком в Tampermonkey/Violentmonkey.
+3. Сохранить (Ctrl+S) и перезагрузить целевую страницу.
+4. Прогнать сценарий из `docs/testing/prompts/testing_prompt.md` (кодировка клавиш e/a/s/c, маркеры `n`/`F`/`f`).
 
-## Per-Script Architecture
+Отчёты о тестировании — в `docs/testing/reports/`.
+
+Для Google AI Search URL должен содержать `udm=50` (AI-режим), иначе скрипт ничего не делает.
+
+## Архитектура скриптов
 
 ### Google AI Search Chat Fixer (`src/google_ai_search_chat_fixer.js`)
-- Guard: URL includes `udm=50`
-- Guard: target is `TEXTAREA` or `contenteditable=true`
-- `Enter` / `Alt+Enter`: prevent default, inject newline, dispatch `input` event
-- `Ctrl+Enter`: not handled — Google's native send trigger fires
-- Newline injection: `value` splice for `TEXTAREA`; `document.execCommand('insertLineBreak')` for `contenteditable`
+- Guard: URL содержит `udm=50`.
+- Guard: target — `TEXTAREA` или `contenteditable=true`.
+- `Enter` / `Alt+Enter`: preventDefault, вставка переноса строки, dispatch события `input`.
+- `Ctrl+Enter` не обрабатывается — срабатывает нативная отправка Google.
+- Вставка переноса: splice `value` для `TEXTAREA`; `document.execCommand('insertLineBreak')` для `contenteditable`.
 
 ### DeepSeek Chat Fixer (`src/deepseek_chat_fixer.js`)
-- Guard: target is `TEXTAREA[name="search"]`
-- `Ctrl+Enter`: dispatches a native `KeyboardEvent('keydown', { key: 'Enter' })` — DeepSeek listens for plain Enter to send
-- `Enter` / `Alt+Enter`: `document.execCommand('insertText', false, '\n')` — preserves Vue/React reactivity and auto-scroll
-- Uses `isSimulating` flag to prevent infinite loop when synthesizing the send event
-- Checks send button disabled state before dispatching send
+- Guard: target — `TEXTAREA[name="search"]`.
+- `Ctrl+Enter`: dispatch синтетического `KeyboardEvent('keydown', { key: 'Enter' })` — DeepSeek отправляет по обычному Enter.
+- `Enter` / `Alt+Enter`: `document.execCommand('insertText', false, '\n')` — сохраняет реактивность фреймворка и автоскролл.
+- Флаг `isSimulating` предотвращает бесконечный цикл при генерации события отправки.
+- Перед отправкой проверяется disabled-состояние кнопки отправки.
 
 ### Qwen Chat Fixer (`src/qwen_chat_fixer.js`)
-- Guard: target matches `.message-input-textarea` (Ant Design)
-- `Ctrl+Enter`: clicks `.send-button:not(.disabled)` directly
-- `Enter` / `Alt+Enter`: `document.execCommand('insertText', false, '\n')` with fallback to manual `value` splice if `execCommand` throws
+- Guard: target соответствует `.message-input-textarea` (Ant Design).
+- `Ctrl+Enter`: программный клик по `.send-button:not(.disabled)`.
+- `Enter` / `Alt+Enter` / `Shift+Enter` (всё без Ctrl): `document.execCommand('insertText', false, '\n')` с фолбеком на ручной splice `value`.
 
-## Code Style Rules
+## Стиль кода
 
-- **Vertical formatting**: multi-property objects and event constructors must be one property per line (diff-friendly). Never single-line dense bundles.
-- **Minimalist comments**: only non-trivial workarounds or architectural constraints. No obvious descriptive comments.
-- **Language**: Russian for user-facing strings and comments (matches the project's locale).
+- **Вертикальное форматирование**: объекты и конструкторы событий с несколькими свойствами — по одному свойству на строку (удобно для diff).
+- **Минимум комментариев**: только для нетривиальных обходных решений и архитектурных ограничений. Никаких очевидных описательных комментариев.
+- **Язык**: русский для пользовательских строк и комментариев.
 
-## Development Workflow (Trunk-Based)
+## Версионирование (SemVer 2.0.0)
 
-- Work in short-lived branches: `patch/<description>` or `feat/<description>` — no version in branch name (multiple scripts with independent versions)
-- Sync: `git checkout main && git pull --rebase`
-- One feature or one bugfix per commit — never mix infrastructure changes with logic fixes
-- Merge locally and push; no PRs
-- Every code change must come with a Conventional Commit message
-- Every commit by the agent must include `Co-Authored-By: Claude <noreply@anthropic.com>` in the commit message trailer
+Версия хранится в `@version` заголовка UserScript каждого скрипта; скрипты версионируются независимо. Менеджер userscript'ов определяет обновление по `@version`, поэтому версию нужно поднимать при каждом изменении кода скрипта:
+- **MAJOR** — архитектурные изменения, переписывание, несовместимые миграции.
+- **MINOR** — новая функциональность (например, поддержка новой платформы).
+- **PATCH** — исправления ошибок, стабильность, правки селекторов и `@match`.
 
-## Versioning (SemVer 2.0.0)
-
-Version is in each script's UserScript header `@version`:
-- **MAJOR**: architectural changes, rewrites, breaking migrations
-- **MINOR**: new features (e.g., supporting a new platform)
-- **PATCH**: bugfixes, stability, selector/match tweaks
-
-## Repository Structure
+## Структура репозитория
 
 ```
 .
-├── CLAUDE.md                 # Этот файл — инструкции для агентов
-├── .claudeignore             # Исключения из контекста агента
+├── CLAUDE.md                 # Этот файл — инструкции для агента
+├── .claude/
+│   └── settings.json         # Настройки Claude Code (запрет чтения docs/archive/)
 ├── .gitignore
 ├── README.md                 # Публичное описание проекта
 ├── docs/
-│   ├── archive/              # Исторический контекст (не читать агенту)
-│   │   ├── profiles/         # Капсулы личности, манифесты
-│   │   ├── prompts/         # Промпты для чат-ботов (onboarding, personality)
-│   │   ├── Chat_history_extras.md
-│   │   └── Project_Retrospective_by_AI.md
+│   ├── archive/              # Исторический контекст (агенту недоступен)
 │   └── testing/              # Тестовые артефакты
-│       ├── prompts/          # Промпты для ручного тестирования через чат-бота
+│       ├── prompts/          # Промпт для ручного тестирования через чат-бота
 │       └── reports/          # Отчёты о тестировании
 └── src/                      # Исходный код юзерскриптов
     ├── deepseek_chat_fixer.js
@@ -92,10 +85,10 @@ Version is in each script's UserScript header `@version`:
     └── qwen_chat_fixer.js
 ```
 
-**Важно:** `docs/archive/` исключена из контекста агента через `.claudeignore`. Она содержит исторический контекст и не является инструкциями для кодинг-агента. Единственный промпт для ручного тестирования хранится в `docs/testing/prompts/testing_prompt.md`.
+`docs/archive/` содержит исторический контекст прошлых итераций (ретроспективы, промпты для других чат-ботов) и не является инструкциями для агента. Чтение закрыто через `permissions.deny` в `.claude/settings.json`.
 
-## Key Constraints
+## Ключевые ограничения
 
-- Each script must remain scoped to its target origin via `@match`. No cross-origin injection.
-- No data collection, caching, or exfiltration.
-- `isTrusted: false` synthetic events may be blocked by SPAs — prefer direct DOM manipulation (`execCommand`, `value` splice, `click()`) over `KeyboardEvent` dispatch where possible. DeepSeek script is the exception where event dispatch is the only working path.
+- Каждый скрипт ограничен своим origin через `@match`. Никаких кросс-доменных инъекций.
+- Никакого сбора, кэширования или передачи данных.
+- Синтетические события с `isTrusted: false` могут блокироваться SPA — по возможности предпочитать прямую работу с DOM (`execCommand`, splice `value`, `click()`) вместо dispatch `KeyboardEvent`. Исключение — DeepSeek, где dispatch события — единственный работающий путь.
