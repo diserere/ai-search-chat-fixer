@@ -13,7 +13,7 @@
 
 | # | Задача | Приоритет |
 |---|--------|-----------|
-| [#8](https://github.com/diserere/ai-search-chat-fixer/issues/8) | Унифицировать заголовки и комментарии скриптов (версия из `@name` уже убрана в #9) | low |
+| [#16](https://github.com/diserere/ai-search-chat-fixer/issues/16) | Поддержка Claude (claude.ai) | — (следующая) |
 
 ### Дефекты
 
@@ -32,4 +32,5 @@
 |---|--------|-----|
 | [#10](https://github.com/diserere/ai-search-chat-fixer/issues/10) | Поддержка ChatGPT (chatgpt.com) — ChatGPT Chat Fixer 1.0.0 | `src/chatgpt_chat_fixer.user.js` |
 | [#9](https://github.com/diserere/ai-search-chat-fixer/issues/9) | Автообновление через `@updateURL` / `@downloadURL`, файлы переименованы в `*.user.js` | все скрипты |
+| [#8](https://github.com/diserere/ai-search-chat-fixer/issues/8) | Унификация заголовков и комментариев скриптов (версия из `@name` убрана в #9) | Google, DeepSeek, Qwen |
 | [#14](https://github.com/diserere/ai-search-chat-fixer/issues/14) | ChatGPT: скрипт не срабатывает на главной — **не дефект**: скрипт был отключён в менеджере; после включения работает | — |
