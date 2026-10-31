@@ -12,10 +12,10 @@
 
 | Скрипт | Путь | Цель | Run at |
 |--------|------|------|--------|
-| Google AI Search Chat Fixer | `src/google_ai_search_chat_fixer.js` | `https://www.google.com/search*` (только AI-режим) | `document-start` |
-| DeepSeek Chat Fixer | `src/deepseek_chat_fixer.js` | `https://chat.deepseek.com/*` | `document-end` |
-| Qwen Chat Fixer | `src/qwen_chat_fixer.js` | `https://chat.qwen.ai/*` | `document-start` |
-| ChatGPT Chat Fixer | `src/chatgpt_chat_fixer.js` | `https://chatgpt.com/*` | `document-start` |
+| Google AI Search Chat Fixer | `src/google_ai_search_chat_fixer.user.js` | `https://www.google.com/search*` (только AI-режим) | `document-start` |
+| DeepSeek Chat Fixer | `src/deepseek_chat_fixer.user.js` | `https://chat.deepseek.com/*` | `document-end` |
+| Qwen Chat Fixer | `src/qwen_chat_fixer.user.js` | `https://chat.qwen.ai/*` | `document-start` |
+| ChatGPT Chat Fixer | `src/chatgpt_chat_fixer.user.js` | `https://chatgpt.com/*` | `document-start` |
 
 Каждый скрипт самодостаточен: один IIFE, один обработчик `keydown` на `window` в фазе capture. Общих модулей нет.
 
@@ -23,9 +23,9 @@
 
 Вручную, в браузере:
 
-1. Отредактировать скрипт в `src/`.
-2. Скопировать содержимое файла целиком в Tampermonkey/Violentmonkey.
-3. Сохранить (Ctrl+S) и перезагрузить целевую страницу.
+1. Отредактировать скрипт в `src/` и поднять `@version`.
+2. Установить скрипт в Tampermonkey/Violentmonkey: по raw-ссылке из ветки (`https://raw.githubusercontent.com/diserere/ai-search-chat-fixer/<branch>/src/<file>.user.js`, после push) либо копированием содержимого файла.
+3. Перезагрузить целевую страницу.
 4. Прогнать сценарий из `docs/testing/prompts/testing_prompt.md` (кодировка клавиш e/a/s/c, маркеры `n`/`F`/`f`).
 
 Отчёты о тестировании — в `docs/testing/reports/`.
@@ -36,26 +36,26 @@
 
 ## Архитектура скриптов
 
-### Google AI Search Chat Fixer (`src/google_ai_search_chat_fixer.js`)
+### Google AI Search Chat Fixer (`src/google_ai_search_chat_fixer.user.js`)
 - Guard: URL содержит `udm=50`.
 - Guard: target — `TEXTAREA` или `contenteditable=true`.
 - `Enter` / `Alt+Enter`: preventDefault, вставка переноса строки, dispatch события `input`.
 - `Ctrl+Enter` не обрабатывается — срабатывает нативная отправка Google.
 - Вставка переноса: splice `value` для `TEXTAREA`; `document.execCommand('insertLineBreak')` для `contenteditable`.
 
-### DeepSeek Chat Fixer (`src/deepseek_chat_fixer.js`)
+### DeepSeek Chat Fixer (`src/deepseek_chat_fixer.user.js`)
 - Guard: target — `TEXTAREA[name="search"]`.
 - `Ctrl+Enter`: dispatch синтетического `KeyboardEvent('keydown', { key: 'Enter' })` — DeepSeek отправляет по обычному Enter.
 - `Enter` / `Alt+Enter`: `document.execCommand('insertText', false, '\n')` — сохраняет реактивность фреймворка и автоскролл.
 - Флаг `isSimulating` предотвращает бесконечный цикл при генерации события отправки.
 - Перед отправкой проверяется disabled-состояние кнопки отправки.
 
-### Qwen Chat Fixer (`src/qwen_chat_fixer.js`)
+### Qwen Chat Fixer (`src/qwen_chat_fixer.user.js`)
 - Guard: target соответствует `.message-input-textarea` (Ant Design).
 - `Ctrl+Enter`: программный клик по `.send-button:not(.disabled)`.
 - `Enter` / `Alt+Enter` / `Shift+Enter` (всё без Ctrl): `document.execCommand('insertText', false, '\n')` с фолбеком на ручной splice `value`.
 
-### ChatGPT Chat Fixer (`src/chatgpt_chat_fixer.js`)
+### ChatGPT Chat Fixer (`src/chatgpt_chat_fixer.user.js`)
 - Guard: target внутри `.ProseMirror`; пропуск при IME-композиции (`isComposing` / `keyCode === 229`).
 - Скрипт не вызывает `preventDefault` и не генерирует событий — он подменяет модификаторы у trusted-события через `Object.defineProperty` в фазе capture:
   - `Enter` / `Alt+Enter` → `shiftKey: true`, `altKey: false` (нативный Shift+Enter — новый абзац);
@@ -70,7 +70,14 @@
 
 ## Версионирование (SemVer 2.0.0)
 
-Версия хранится в `@version` заголовка UserScript каждого скрипта; скрипты версионируются независимо. Менеджер userscript'ов определяет обновление по `@version`, поэтому версию нужно поднимать при каждом изменении кода скрипта:
+Версия хранится в `@version` заголовка UserScript каждого скрипта; скрипты версионируются независимо.
+
+Скрипты обновляются автоматически: `@updateURL` / `@downloadURL` указывают на raw-файл в `main`, поэтому **мерж в `main` = релиз** для всех установленных копий. Правила:
+- `@version` поднимать при каждом изменении скрипта — менеджер обновляет только при росте версии. Тестовая копия из ветки с более высокой версией не будет перезаписана версией из `main`.
+- `@name` и `@namespace` не менять и не включать в `@name` версию: по этой паре менеджер идентифицирует скрипт, при изменении обновление установится как новый скрипт.
+- Имя файла — `*.user.js`; при переименовании обновить `@updateURL` / `@downloadURL`.
+
+Какую часть версии поднимать:
 - **MAJOR** — архитектурные изменения, переписывание, несовместимые миграции.
 - **MINOR** — новая функциональность (например, поддержка новой платформы).
 - **PATCH** — исправления ошибок, стабильность, правки селекторов и `@match`.
@@ -95,10 +102,10 @@
 │       ├── prompts/          # Промпт для ручного тестирования через чат-бота
 │       └── reports/          # Отчёты о тестировании
 └── src/                      # Исходный код юзерскриптов
-    ├── chatgpt_chat_fixer.js
-    ├── deepseek_chat_fixer.js
-    ├── google_ai_search_chat_fixer.js
-    └── qwen_chat_fixer.js
+    ├── chatgpt_chat_fixer.user.js
+    ├── deepseek_chat_fixer.user.js
+    ├── google_ai_search_chat_fixer.user.js
+    └── qwen_chat_fixer.user.js
 ```
 
 `docs/archive/` содержит исторический контекст прошлых итераций (ретроспективы, промпты для других чат-ботов) и не является инструкциями для агента. Чтение закрыто через `permissions.deny` в `.claude/settings.json`.
