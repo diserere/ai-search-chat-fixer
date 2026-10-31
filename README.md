@@ -22,10 +22,10 @@
 │       ├── prompts/            # Промпт для ручного тестирования через чат-бота
 │       └── reports/            # Отчёты о тестировании
 └── src/                        # Исходный код юзерскриптов
-    ├── chatgpt_chat_fixer.js
-    ├── deepseek_chat_fixer.js
-    ├── google_ai_search_chat_fixer.js
-    └── qwen_chat_fixer.js
+    ├── chatgpt_chat_fixer.user.js
+    ├── deepseek_chat_fixer.user.js
+    ├── google_ai_search_chat_fixer.user.js
+    └── qwen_chat_fixer.user.js
 ```
 
 ## Решаемая проблема
@@ -46,22 +46,26 @@
 ## Поддерживаемые модули
 
 ### 1. Google AI Search Chat Fixer
-* **Файл:** [`src/google_ai_search_chat_fixer.js`](./src/google_ai_search_chat_fixer.js)
+* **Файл:** [`src/google_ai_search_chat_fixer.user.js`](./src/google_ai_search_chat_fixer.user.js)
+* **Установить:** [google_ai_search_chat_fixer.user.js](https://raw.githubusercontent.com/diserere/ai-search-chat-fixer/main/src/google_ai_search_chat_fixer.user.js)
 * **Область действия:** `https://www.google.com/search*`
 * **Особенности:** Безопасно инжектирует переносы `<br>` в кастомное DOM-дерево ИИ-поиска Google на этапе погружения событий, полностью блокируя скрытые триггеры отправки. Запускается только на странице ИИ поиска Гугл (`udm=50`).
 
 ### 2. DeepSeek Chat Fixer
-* **Файл:** [`src/deepseek_chat_fixer.js`](./src/deepseek_chat_fixer.js)
+* **Файл:** [`src/deepseek_chat_fixer.user.js`](./src/deepseek_chat_fixer.user.js)
+* **Установить:** [deepseek_chat_fixer.user.js](https://raw.githubusercontent.com/diserere/ai-search-chat-fixer/main/src/deepseek_chat_fixer.user.js)
 * **Область действия:** `https://chat.deepseek.com/*`
 * **Особенности:** Использует нативный ввод символов через `insertText` для сохранения реактивности Vue/React-фреймворка (окно ввода послушно растягивается и скроллится). Отправка по `Ctrl+Enter` реализована через генерацию нативного `KeyboardEvent('keydown')`, что обходит любые ограничения кастомных графических кнопок.
 
 ### 3. Qwen Chat Fixer
-* **Файл:** [`src/qwen_chat_fixer.js`](./src/qwen_chat_fixer.js)
+* **Файл:** [`src/qwen_chat_fixer.user.js`](./src/qwen_chat_fixer.user.js)
+* **Установить:** [qwen_chat_fixer.user.js](https://raw.githubusercontent.com/diserere/ai-search-chat-fixer/main/src/qwen_chat_fixer.user.js)
 * **Область действия:** `https://chat.qwen.ai/*`
 * **Особенности:** Перехватывает управление интерфейсом на базе библиотеки Ant Design на этапе погружения событий (`capture: true`). Блокирует дефолтную отправку по `Enter` и `Alt+Enter`, заменяя её безопасной симуляцией переноса строки через `execCommand('insertText')`, что сохраняет реактивность Virtual DOM и нативный автоскролл. Отправка по `Ctrl+Enter` делегирована программному клику по активной кнопке отправки.
 
 ### 4. ChatGPT Chat Fixer
-* **Файл:** [`src/chatgpt_chat_fixer.js`](./src/chatgpt_chat_fixer.js)
+* **Файл:** [`src/chatgpt_chat_fixer.user.js`](./src/chatgpt_chat_fixer.user.js)
+* **Установить:** [chatgpt_chat_fixer.user.js](https://raw.githubusercontent.com/diserere/ai-search-chat-fixer/main/src/chatgpt_chat_fixer.user.js)
 * **Область действия:** `https://chatgpt.com/*`
 * **Особенности:** Поле ввода ChatGPT — редактор ProseMirror, который игнорирует синтетические события и воспринимает программную вставку абзаца как отправку. Поэтому скрипт не генерирует собственных событий, а подменяет модификаторы у реального нажатия: `Enter` и `Alt+Enter` превращаются в `Shift+Enter` (нативный перенос строки), а `Ctrl+Enter` — в обычный `Enter` (нативная отправка). Поведение, автоскролл и история отмены полностью совпадают с родными.
 
@@ -70,9 +74,18 @@
 ## Установка
 
 1. Установите любое расширение для управления пользовательскими скриптами в ваш браузер (например, [Tampermonkey](https://tampermonkey.net) или [Violentmonkey](https://violentmonkey.github.io/)).
-2. Скопируйте код нужного скрипта из папки `src/`.
-3. Создайте новый скрипт в расширении и вставьте скопированный код.
-4. Сохраните изменения. Скрипт активируется автоматически при переходе на целевой сайт или при полной перезагрузке уже открытой страницы.
+2. Откройте ссылку **«Установить»** нужного скрипта в разделе [Поддерживаемые модули](#поддерживаемые-модули) — расширение покажет страницу установки.
+3. Подтвердите установку. Скрипт активируется при переходе на целевой сайт или при полной перезагрузке уже открытой страницы.
+
+### Обновления
+
+Скрипты, установленные по ссылке, обновляются автоматически: расширение периодически сверяет версию с репозиторием и предлагает установить новую. Проверить обновления вручную можно в меню расширения.
+
+> **Если вы ставили скрипт копированием кода** (до появления автообновления), переустановите его по ссылке и удалите старую копию. Старые версии Google AI Search Chat Fixer (до 2.1.0) и DeepSeek Chat Fixer (до 1.5.0) содержали номер версии в названии, поэтому расширение не свяжет их с новыми автоматически.
+
+### Ручная установка
+
+Если установка по ссылке недоступна: создайте новый скрипт в расширении, вставьте в него код файла из папки `src/` и сохраните. Автообновление работает и для такой копии — адрес обновлений записан в заголовке скрипта.
 
 ## Разработка
 

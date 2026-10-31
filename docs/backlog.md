@@ -13,8 +13,7 @@
 
 | # | Задача | Приоритет |
 |---|--------|-----------|
-| [#9](https://github.com/diserere/ai-search-chat-fixer/issues/9) | `@updateURL` / `@downloadURL` для автообновления скриптов | medium |
-| [#8](https://github.com/diserere/ai-search-chat-fixer/issues/8) | Унифицировать заголовки и комментарии скриптов | low |
+| [#8](https://github.com/diserere/ai-search-chat-fixer/issues/8) | Унифицировать заголовки и комментарии скриптов (версия из `@name` уже убрана в #9) | low |
 
 ### Дефекты
 
@@ -25,9 +24,12 @@
 | [#5](https://github.com/diserere/ai-search-chat-fixer/issues/5) | Google | Splice `value` в `TEXTAREA` может не обновлять состояние фреймворка *(требует проверки)* | low |
 | [#6](https://github.com/diserere/ai-search-chat-fixer/issues/6) | Qwen | Фолбек в `catch` недостижим: `execCommand` возвращает `false`, а не бросает | low |
 | [#7](https://github.com/diserere/ai-search-chat-fixer/issues/7) | DeepSeek | Селектор кнопки отправки может найти не ту кнопку *(требует проверки)* | low |
+| [#15](https://github.com/diserere/ai-search-chat-fixer/issues/15) | Google | `Alt+Enter` не вставляет перенос строки *(требует проверки)* | low |
 
 ## Сделано
 
 | # | Задача | Где |
 |---|--------|-----|
-| [#10](https://github.com/diserere/ai-search-chat-fixer/issues/10) | Поддержка ChatGPT (chatgpt.com) — ChatGPT Chat Fixer 1.0.0 | `src/chatgpt_chat_fixer.js` |
+| [#10](https://github.com/diserere/ai-search-chat-fixer/issues/10) | Поддержка ChatGPT (chatgpt.com) — ChatGPT Chat Fixer 1.0.0 | `src/chatgpt_chat_fixer.user.js` |
+| [#9](https://github.com/diserere/ai-search-chat-fixer/issues/9) | Автообновление через `@updateURL` / `@downloadURL`, файлы переименованы в `*.user.js` | все скрипты |
+| [#14](https://github.com/diserere/ai-search-chat-fixer/issues/14) | ChatGPT: скрипт не срабатывает на главной — **не дефект**: скрипт был отключён в менеджере; после включения работает | — |
