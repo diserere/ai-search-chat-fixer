@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         Qwen Chat Fixer
 // @namespace    https://github.com/diserere/ai-search-chat-fixer
-// @version      1.1.0
-// @description  Fixes Enter/Ctrl+Enter behavior in Qwen Chat (chat.qwen.ai) to prevent accidental line sends.
+// @version      1.1.1
+// @description  Исправляет поведение клавиш в чате Qwen: Enter делает перенос строки, а Ctrl+Enter отправляет сообщение.
 // @icon         https://chat.qwen.ai/favicon.ico
-// @author       diserere (https://github.com/diserere) & Google AI Search Assistant
+// @author       diserere (https://github.com/diserere)
 // @homepageURL  https://github.com/diserere/ai-search-chat-fixer
 // @updateURL    https://raw.githubusercontent.com/diserere/ai-search-chat-fixer/main/src/qwen_chat_fixer.user.js
 // @downloadURL  https://raw.githubusercontent.com/diserere/ai-search-chat-fixer/main/src/qwen_chat_fixer.user.js
@@ -16,12 +16,10 @@
 (function() {
     'use strict';
 
-    // Селекторы элементов интерфейса Qwen (Ant Design)
     const TEXTAREA_SELECTOR = '.message-input-textarea';
     const SEND_BUTTON_SELECTOR = '.send-button:not(.disabled)';
 
     function handleKeyDown(e) {
-        // Перехватываем события только внутри целевого поля ввода
         if (!e.target.matches(TEXTAREA_SELECTOR)) return;
 
         if (e.key === 'Enter') {
@@ -29,7 +27,6 @@
             const isShift = e.shiftKey;
             const isAlt = e.altKey;
 
-            // Кейс 1: Ctrl+Enter (или Cmd+Enter) -> Гарантированная отправка сообщения
             if (isCtrl && !isShift && !isAlt) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -41,16 +38,14 @@
                 return;
             }
 
-            // Кейс 2: Обычный Enter, Alt+Enter или Shift+Enter -> Перевод строки и скролл
             if (!isCtrl) {
                 e.preventDefault();
                 e.stopPropagation();
 
-                // Безопасная вставка символа для сохранения реактивности Virtual DOM
+                // execCommand, а не правка value: фреймворк видит изменение, растягивает поле и скроллит
                 try {
                     document.execCommand('insertText', false, '\n');
                 } catch (err) {
-                    // Резервный фолбек на случай блокировки execCommand браузером
                     const start = e.target.selectionStart;
                     const end = e.target.selectionEnd;
                     const value = e.target.value;
@@ -63,6 +58,5 @@
         }
     }
 
-    // Перехват на этапе погружения (capture: true) для обхода внутренних обработчиков чата
     window.addEventListener('keydown', handleKeyDown, true);
 })();
