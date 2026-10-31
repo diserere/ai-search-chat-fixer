@@ -19,7 +19,6 @@
 
 | # | Скрипт | Задача | Приоритет |
 |---|--------|--------|-----------|
-| [#14](https://github.com/diserere/ai-search-chat-fixer/issues/14) | ChatGPT | Скрипт не срабатывает на главной странице (новый чат) *(требует проверки)* | high |
 | [#3](https://github.com/diserere/ai-search-chat-fixer/issues/3) | все | Enter при IME-композиции превращается в перенос строки — нет проверки `isComposing` | medium |
 | [#4](https://github.com/diserere/ai-search-chat-fixer/issues/4) | Google | `Cmd+Enter` на macOS вставляет перенос вместо отправки — не проверяется `metaKey` | medium |
 | [#5](https://github.com/diserere/ai-search-chat-fixer/issues/5) | Google | Splice `value` в `TEXTAREA` может не обновлять состояние фреймворка *(требует проверки)* | low |
@@ -33,3 +32,4 @@
 |---|--------|-----|
 | [#10](https://github.com/diserere/ai-search-chat-fixer/issues/10) | Поддержка ChatGPT (chatgpt.com) — ChatGPT Chat Fixer 1.0.0 | `src/chatgpt_chat_fixer.user.js` |
 | [#9](https://github.com/diserere/ai-search-chat-fixer/issues/9) | Автообновление через `@updateURL` / `@downloadURL`, файлы переименованы в `*.user.js` | все скрипты |
+| [#14](https://github.com/diserere/ai-search-chat-fixer/issues/14) | ChatGPT: скрипт не срабатывает на главной — **не дефект**: скрипт был отключён в менеджере; после включения работает | — |
