@@ -1,11 +1,13 @@
 // ==UserScript==
 // @name         Qwen Chat Fixer
 // @namespace    https://github.com/diserere/ai-search-chat-fixer
-// @version      1.0.0
+// @version      1.1.0
 // @description  Fixes Enter/Ctrl+Enter behavior in Qwen Chat (chat.qwen.ai) to prevent accidental line sends.
 // @icon         https://chat.qwen.ai/favicon.ico
 // @author       diserere (https://github.com/diserere) & Google AI Search Assistant
 // @homepageURL  https://github.com/diserere/ai-search-chat-fixer
+// @updateURL    https://raw.githubusercontent.com/diserere/ai-search-chat-fixer/main/src/qwen_chat_fixer.user.js
+// @downloadURL  https://raw.githubusercontent.com/diserere/ai-search-chat-fixer/main/src/qwen_chat_fixer.user.js
 // @match        https://chat.qwen.ai/*
 // @grant        none
 // @run-at       document-start

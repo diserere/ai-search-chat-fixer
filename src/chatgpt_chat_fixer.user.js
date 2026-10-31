@@ -1,11 +1,13 @@
 // ==UserScript==
 // @name         ChatGPT Chat Fixer
 // @namespace    https://github.com/diserere/ai-search-chat-fixer
-// @version      1.0.0
+// @version      1.1.0
 // @description  Исправляет поведение клавиш в чате ChatGPT: Enter делает перенос строки, а Ctrl+Enter отправляет сообщение.
 // @icon         https://chatgpt.com/favicon.ico
 // @author       diserere (https://github.com/diserere)
 // @homepageURL  https://github.com/diserere/ai-search-chat-fixer
+// @updateURL    https://raw.githubusercontent.com/diserere/ai-search-chat-fixer/main/src/chatgpt_chat_fixer.user.js
+// @downloadURL  https://raw.githubusercontent.com/diserere/ai-search-chat-fixer/main/src/chatgpt_chat_fixer.user.js
 // @match        https://chatgpt.com/*
 // @grant        none
 // @run-at       document-start

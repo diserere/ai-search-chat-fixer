@@ -1,11 +1,13 @@
 // ==UserScript==
-// @name         Google AI Search Chat Fixer 2.0.5
+// @name         Google AI Search Chat Fixer
 // @namespace    https://github.com/diserere/ai-search-chat-fixer
-// @version      2.0.5
+// @version      2.1.0
 // @description  Safely maps Enter and Alt+Enter to Newline using direct DOM injection with AI context validation.
 // @icon         https://www.google.com/favicon.ico
 // @author       diserere (https://github.com/diserere)
 // @homepageURL  https://github.com/diserere/ai-search-chat-fixer
+// @updateURL    https://raw.githubusercontent.com/diserere/ai-search-chat-fixer/main/src/google_ai_search_chat_fixer.user.js
+// @downloadURL  https://raw.githubusercontent.com/diserere/ai-search-chat-fixer/main/src/google_ai_search_chat_fixer.user.js
 // @match        https://www.google.com/search*
 // @grant        none
 // @run-at       document-start
