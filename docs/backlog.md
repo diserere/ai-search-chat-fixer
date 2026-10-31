@@ -19,11 +19,13 @@
 
 | # | Скрипт | Задача | Приоритет |
 |---|--------|--------|-----------|
+| [#14](https://github.com/diserere/ai-search-chat-fixer/issues/14) | ChatGPT | Скрипт не срабатывает на главной странице (новый чат) *(требует проверки)* | high |
 | [#3](https://github.com/diserere/ai-search-chat-fixer/issues/3) | все | Enter при IME-композиции превращается в перенос строки — нет проверки `isComposing` | medium |
 | [#4](https://github.com/diserere/ai-search-chat-fixer/issues/4) | Google | `Cmd+Enter` на macOS вставляет перенос вместо отправки — не проверяется `metaKey` | medium |
 | [#5](https://github.com/diserere/ai-search-chat-fixer/issues/5) | Google | Splice `value` в `TEXTAREA` может не обновлять состояние фреймворка *(требует проверки)* | low |
 | [#6](https://github.com/diserere/ai-search-chat-fixer/issues/6) | Qwen | Фолбек в `catch` недостижим: `execCommand` возвращает `false`, а не бросает | low |
 | [#7](https://github.com/diserere/ai-search-chat-fixer/issues/7) | DeepSeek | Селектор кнопки отправки может найти не ту кнопку *(требует проверки)* | low |
+| [#15](https://github.com/diserere/ai-search-chat-fixer/issues/15) | Google | `Alt+Enter` не вставляет перенос строки *(требует проверки)* | low |
 
 ## Сделано
 
